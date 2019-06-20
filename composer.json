@@ -1,0 +1,26 @@
+{
+    "name": "stavarengo/travel-sorter",
+    "description": "Travel sorter.",
+    "type": "project",
+    "config": {
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "TravelSorter\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TravelSorter\\Test\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^7.2"
+    },
+    "require-dev": {
+    },
+    "scripts": {
+        "serve": "php -S 0.0.0.0:4000 -t public/"
+    }
+}
