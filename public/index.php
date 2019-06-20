@@ -17,6 +17,12 @@ require __DIR__ . '/../vendor/autoload.php';
  * the global scope.
  */
 (function () {
+    /** @var \Psr\Container\ContainerInterface $container */
+    $container = include_once __DIR__ . '/../config/container.php';
+    /** @var \TravelSorter\App\BasePathDetector\BasePathDetectorInterface $basePathDetector */
+    $basePathDetector = $container->get(\TravelSorter\App\BasePathDetector\BasePathDetectorInterface::class);
+
     http_response_code(200);
-    echo 'It works!';
+    echo 'It works!<br>';
+    echo sprintf('Base path is: <code>%s</code>', $basePathDetector->detect());
 })();
