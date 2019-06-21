@@ -7,6 +7,9 @@
         <testsuite name="TravelSorter App Module">
             <directory>./test/App</directory>
         </testsuite>
+        <testsuite name="TravelSorter Api Module">
+            <directory>./test/Api</directory>
+        </testsuite>
     </testsuites>
 
     <filter>
