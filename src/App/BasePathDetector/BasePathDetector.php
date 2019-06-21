@@ -65,4 +65,20 @@ class BasePathDetector implements BasePathDetectorInterface
 
         return '/' . $basePath;
     }
+
+    /**
+     * @return string
+     */
+    public function getDocumentRoot(): string
+    {
+        return $this->documentRoot;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPublicDirectoryPath(): string
+    {
+        return $this->publicDirectoryPath;
+    }
 }

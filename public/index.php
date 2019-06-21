@@ -19,10 +19,30 @@ require __DIR__ . '/../vendor/autoload.php';
 (function () {
     /** @var \Psr\Container\ContainerInterface $container */
     $container = include_once __DIR__ . '/../config/container.php';
-    /** @var \TravelSorter\App\BasePathDetector\BasePathDetectorInterface $basePathDetector */
-    $basePathDetector = $container->get(\TravelSorter\App\BasePathDetector\BasePathDetectorInterface::class);
 
-    http_response_code(200);
-    echo 'It works!<br>';
-    echo sprintf('Base path is: <code>%s</code>', $basePathDetector->detect());
+    try {
+        /** @var \TravelSorter\App\Dispatcher\DispatcherInterface $dispatcher */
+        $dispatcher = $container->get(\TravelSorter\App\Dispatcher\DispatcherInterface::class);
+
+        $dispatcherResponse = $dispatcher->dispatch($_SERVER['REQUEST_URI']);
+        if (!$dispatcherResponse) {
+            $dispatcherResponse = new \TravelSorter\App\Dispatcher\DispatcherResponse(
+                404,
+                'Not found!',
+                ['Content-Type' => 'text/html; charset=UTF-8']
+            );
+        }
+    } catch (\Throwable $e) {
+        $dispatcherResponse = $dispatcherResponse = new \TravelSorter\App\Dispatcher\DispatcherResponse(
+            500,
+            sprintf("Server error!\n\n%s", $e),
+            ['Content-Type' => 'text/html; charset=UTF-8']
+        );
+    }
+
+    http_response_code($dispatcherResponse->getStatusCode());
+    foreach ($dispatcherResponse->getHeaders() as $headerName => $hederValue) {
+        header("$headerName: $hederValue");
+    }
+    echo $dispatcherResponse->getContent();
 })();

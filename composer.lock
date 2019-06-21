@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f606205e94a49e7b05852f0f25190daf",
+    "content-hash": "1d36845a3602e7d278da456919b9dc52",
     "packages": [
         {
             "name": "jeremeamia/superclosure",
@@ -414,6 +414,107 @@
                 "shim"
             ],
             "time": "2019-02-08T14:16:39+00:00"
+        },
+        {
+            "name": "zendframework/zend-config-aggregator",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/zend-config-aggregator.git",
+                "reference": "2a08547b64119a73b6700bde3301d978258dfcb5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/zend-config-aggregator/zipball/2a08547b64119a73b6700bde3301d978258dfcb5",
+                "reference": "2a08547b64119a73b6700bde3301d978258dfcb5",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.6 || ^7.0",
+                "zendframework/zend-stdlib": "^2.7.7 || ^3.1.0"
+            },
+            "require-dev": {
+                "malukenho/docheader": "^0.1.5",
+                "mikey179/vfsstream": "^1.6",
+                "phpunit/phpunit": "^5.7.21 || ^6.3",
+                "zendframework/zend-coding-standard": "~1.0.0",
+                "zendframework/zend-config": "^2.6 || ^3.0",
+                "zendframework/zend-servicemanager": "^2.7.7 || ^3.1.1"
+            },
+            "suggest": {
+                "zendframework/zend-config": "Allows loading configuration from XML, INI, YAML, and JSON files",
+                "zendframework/zend-config-aggregator-modulemanager": "Allows loading configuration from zend-mvc Module classes",
+                "zendframework/zend-config-aggregator-parameters": "Allows usage of templated parameters within your configuration"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev",
+                    "dev-develop": "1.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Zend\\ConfigAggregator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Lightweight library for collecting and merging configuration from different sources",
+            "keywords": [
+                "ZendFramework",
+                "config-aggregator",
+                "zf"
+            ],
+            "time": "2018-04-04T20:37:31+00:00"
+        },
+        {
+            "name": "zendframework/zend-stdlib",
+            "version": "3.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/zend-stdlib.git",
+                "reference": "66536006722aff9e62d1b331025089b7ec71c065"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/zend-stdlib/zipball/66536006722aff9e62d1b331025089b7ec71c065",
+                "reference": "66536006722aff9e62d1b331025089b7ec71c065",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.6 || ^7.0"
+            },
+            "require-dev": {
+                "phpbench/phpbench": "^0.13",
+                "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.2",
+                "zendframework/zend-coding-standard": "~1.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.2.x-dev",
+                    "dev-develop": "3.3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Zend\\Stdlib\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "SPL extensions, array utilities, error handlers, and more",
+            "keywords": [
+                "ZendFramework",
+                "stdlib",
+                "zf"
+            ],
+            "time": "2018-08-28T21:34:05+00:00"
         }
     ],
     "packages-dev": [
