@@ -17,12 +17,12 @@
     },
     "require": {
         "php": "^7.2",
+        "ext-json": "*",
         "php-di/php-di": "^6.0",
         "psr/container": "^1.0",
         "zendframework/zend-config-aggregator": "^1.1"
     },
     "require-dev": {
-        "ext-json": "*",
         "phpunit/phpunit": "^8.2"
     },
     "scripts": {
