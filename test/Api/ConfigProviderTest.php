@@ -2,7 +2,7 @@
 /** @noinspection PhpUnhandledExceptionInspection */
 declare(strict_types=1);
 
-namespace TravelSorter\Test\Api\Dispatcher;
+namespace TravelSorter\Test\Api;
 
 use PHPUnit\Framework\TestCase;
 use TravelSorter\Api\ConfigProvider;
