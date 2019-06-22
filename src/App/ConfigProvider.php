@@ -3,8 +3,8 @@
 namespace TravelSorter\App;
 
 use TravelSorter\App\BasePathDetector\BasePathDetectorInterface;
+use TravelSorter\App\Dispatcher\DispatcherAggregate;
 use TravelSorter\App\Dispatcher\DispatcherAggregateFactory;
-use TravelSorter\App\Dispatcher\DispatcherInterface;
 
 /**
  * The configuration provider for the App module
@@ -17,7 +17,7 @@ class ConfigProvider
             'container_definitions' => $this->getContainerDefinitions(),
             self::class => [
                 BasePathDetectorInterface::class => $this->getBasePathDetectorConfig(),
-                DispatcherInterface::class => $this->getDispatcherConfig(),
+                DispatcherAggregate::class => $this->getDispatcherAggregateConfig(),
             ]
         ];
     }
@@ -40,10 +40,10 @@ class ConfigProvider
         ];
     }
 
-    public function getDispatcherConfig(): array
+    public function getDispatcherAggregateConfig(): array
     {
         return [
-            DispatcherInterface::CONFIG_DISPATCHERS => [],
+            DispatcherAggregate::CONFIG_DISPATCHERS => [],
         ];
     }
 

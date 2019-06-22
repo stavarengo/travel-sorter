@@ -49,7 +49,7 @@ class DispatcherAggregateFactoryTest extends TestCase
         }
 
         if ($isContainerWellConfigured) {
-            foreach ($config[ConfigProvider::class][DispatcherInterface::class][DispatcherInterface::CONFIG_DISPATCHERS] as $expectedDispatcher) {
+            foreach ($config[ConfigProvider::class][DispatcherAggregate::class][DispatcherAggregate::CONFIG_DISPATCHERS] as $expectedDispatcher) {
                 $mockContainerGetResultMap[] = [$expectedDispatcher, $this->createMock(DispatcherInterface::class)];
             }
         }
@@ -61,8 +61,8 @@ class DispatcherAggregateFactoryTest extends TestCase
         $mockBasePathDetector = $this->createMock(BasePathDetectorInterface::class);
         $dispatcherAggregate = $factory->__invoke($mockBasePathDetector, $stubContainer);
 
-        $basePathDetectorConfig = $config[ConfigProvider::class][DispatcherInterface::class];
-        $expectedDispatchers = $basePathDetectorConfig[DispatcherInterface::CONFIG_DISPATCHERS];
+        $basePathDetectorConfig = $config[ConfigProvider::class][DispatcherAggregate::class];
+        $expectedDispatchers = $basePathDetectorConfig[DispatcherAggregate::CONFIG_DISPATCHERS];
 
         $this->assertInstanceOf(DispatcherAggregate::class, $dispatcherAggregate);
         $this->assertSame($mockBasePathDetector, $dispatcherAggregate->getBasePathDetector());
@@ -79,7 +79,7 @@ class DispatcherAggregateFactoryTest extends TestCase
                 false,
                 [
                     ConfigProvider::class => [
-                        DispatcherInterface::class => [],
+                        DispatcherAggregate::class => [],
                     ],
                 ],
             ],
@@ -87,8 +87,8 @@ class DispatcherAggregateFactoryTest extends TestCase
                 true,
                 [
                     ConfigProvider::class => [
-                        DispatcherInterface::class => [
-                            DispatcherInterface::CONFIG_DISPATCHERS => [
+                        DispatcherAggregate::class => [
+                            DispatcherAggregate::CONFIG_DISPATCHERS => [
                                 'DispatchService1',
                             ],
                         ],
@@ -99,8 +99,8 @@ class DispatcherAggregateFactoryTest extends TestCase
                 true,
                 [
                     ConfigProvider::class => [
-                        DispatcherInterface::class => [
-                            DispatcherInterface::CONFIG_DISPATCHERS => [
+                        DispatcherAggregate::class => [
+                            DispatcherAggregate::CONFIG_DISPATCHERS => [
                                 'DispatchService1',
                                 'DispatchService2',
                                 'DispatchService3',

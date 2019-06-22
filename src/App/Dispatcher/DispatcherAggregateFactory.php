@@ -17,15 +17,15 @@ class DispatcherAggregateFactory
         $config = $container->has('config') ? $container->get('config') : null;
         $dispatcherConfig = [];
 
-        if ($config && isset($config[ConfigProvider::class][DispatcherInterface::class])) {
-            $dispatcherConfig = $config[ConfigProvider::class][DispatcherInterface::class];
+        if ($config && isset($config[ConfigProvider::class][DispatcherAggregate::class])) {
+            $dispatcherConfig = $config[ConfigProvider::class][DispatcherAggregate::class];
         }
 
-        if (!array_key_exists(DispatcherInterface::CONFIG_DISPATCHERS, $dispatcherConfig)) {
+        if (!array_key_exists(DispatcherAggregate::CONFIG_DISPATCHERS, $dispatcherConfig)) {
             throw new MissingConfigEntry(
                 sprintf(
                     'Missing config of the "%s". You must add a service in your container called "config" that must return an `array` with all necessary configurations.',
-                    DispatcherInterface::class
+                    DispatcherAggregate::class
                 )
             );
         }
@@ -35,7 +35,7 @@ class DispatcherAggregateFactory
             function ($dispatcher) use ($container) {
                 return $container->get($dispatcher);
             },
-            $dispatcherConfig[DispatcherInterface::CONFIG_DISPATCHERS]
+            $dispatcherConfig[DispatcherAggregate::CONFIG_DISPATCHERS]
         );
 
         return new DispatcherAggregate($basePathDetector, $dispatchers);

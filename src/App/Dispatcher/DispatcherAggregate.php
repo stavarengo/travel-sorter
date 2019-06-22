@@ -10,6 +10,13 @@ use TravelSorter\App\BasePathDetector\BasePathDetectorInterface;
 class DispatcherAggregate implements DispatcherInterface
 {
     /**
+     * All dispatchers to be aggregate.
+     * This must be an array of strings.
+     * Each string must be the name of "service" inside your DI container.
+     */
+    public const CONFIG_DISPATCHERS = 'dispatchers';
+
+    /**
      * @var BasePathDetectorInterface
      */
     protected $basePathDetector;

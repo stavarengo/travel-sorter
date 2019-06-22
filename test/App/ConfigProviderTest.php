@@ -7,7 +7,7 @@ namespace TravelSorter\Test\App\Dispatcher;
 use PHPUnit\Framework\TestCase;
 use TravelSorter\App\BasePathDetector\BasePathDetectorInterface;
 use TravelSorter\App\ConfigProvider;
-use TravelSorter\App\Dispatcher\DispatcherInterface;
+use TravelSorter\App\Dispatcher\DispatcherAggregate;
 
 class ConfigProviderTest extends TestCase
 {
@@ -27,7 +27,7 @@ class ConfigProviderTest extends TestCase
             'container_definitions' => $configProvider->getContainerDefinitions(),
             ConfigProvider::class => [
                 BasePathDetectorInterface::class => $configProvider->getBasePathDetectorConfig(),
-                DispatcherInterface::class => $configProvider->getDispatcherConfig(),
+                DispatcherAggregate::class => $configProvider->getDispatcherAggregateConfig(),
             ]
         ];
 

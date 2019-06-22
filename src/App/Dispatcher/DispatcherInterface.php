@@ -8,13 +8,6 @@ namespace TravelSorter\App\Dispatcher;
 interface DispatcherInterface
 {
     /**
-     * All dispatchers of the application.
-     * This must be an array of strings.
-     * Each string must be the name of "service" inside your DI container.
-     */
-    public const CONFIG_DISPATCHERS = 'dispatchers';
-
-    /**
      * Dispatch the request based on the $requestRoute.
      * It should return a response if, and only if, the $requestRoute is one of its route.
      * If the dispatch does not support the $requestRoute it should return null;
