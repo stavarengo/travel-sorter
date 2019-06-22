@@ -40,7 +40,16 @@ class ListOfTickets implements ResponseBodyInterface
     public function toJson(): string
     {
         return json_encode([
-            'tickets' => $this->tickets
+            'tickets' => array_map(function (TicketInterface $ticket) {
+                return [
+                    'transport' => $ticket->getTransport(),
+                    'origin' => $ticket->getOrigin(),
+                    'destiny' => $ticket->getDestiny(),
+                    'seat' => $ticket->getSeat(),
+                    'gate' => $ticket->getGate(),
+                    'extra' => $ticket->getExtra(),
+                ];
+            }, $this->tickets),
         ]);
     }
 }
