@@ -24,7 +24,7 @@ require __DIR__ . '/../vendor/autoload.php';
         /** @var \TravelSorter\App\Dispatcher\DispatcherInterface $dispatcher */
         $dispatcher = $container->get(\TravelSorter\App\Dispatcher\DispatcherInterface::class);
 
-        $dispatcherResponse = $dispatcher->dispatch($_SERVER['REQUEST_URI']);
+        $dispatcherResponse = $dispatcher->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
         if (!$dispatcherResponse) {
             $dispatcherResponse = new \TravelSorter\App\Dispatcher\DispatcherResponse(
                 404,

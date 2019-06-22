@@ -29,11 +29,11 @@ class DispatcherAggregate implements DispatcherInterface
         $this->basePathDetector = $basePathDetector;
     }
 
-    public function dispatch(string $requestRoute): ?DispatcherResponse
+    public function dispatch(string $requestRoute, string $httpMethod): ?DispatcherResponse
     {
         $dispatcherResponse = null;
         foreach ($this->dispatchers as $dispatcher) {
-            if ($dispatcherResponse = $dispatcher->dispatch($requestRoute)) {
+            if ($dispatcherResponse = $dispatcher->dispatch($requestRoute, $httpMethod)) {
                 return $dispatcherResponse;
             }
         }

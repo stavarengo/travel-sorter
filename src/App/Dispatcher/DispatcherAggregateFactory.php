@@ -31,7 +31,12 @@ class DispatcherAggregateFactory
         }
 
         /** @var DispatcherInterface[] $dispatchers */
-        $dispatchers = $dispatcherConfig[DispatcherInterface::CONFIG_DISPATCHERS];
+        $dispatchers = array_map(
+            function ($dispatcher) use ($container) {
+                return $container->get($dispatcher);
+            },
+            $dispatcherConfig[DispatcherInterface::CONFIG_DISPATCHERS]
+        );
 
         return new DispatcherAggregate($basePathDetector, $dispatchers);
 

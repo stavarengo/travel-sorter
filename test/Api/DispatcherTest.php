@@ -6,6 +6,7 @@ namespace TravelSorter\Test\Api;
 
 use PHPUnit\Framework\TestCase;
 use TravelSorter\Api\Dispatcher;
+use TravelSorter\Api\RequestHandler\RequestHandlerInterface;
 
 class DispatcherTest extends TestCase
 {
@@ -19,7 +20,8 @@ class DispatcherTest extends TestCase
         bool $responseMustBeNull
     ) {
         $failMessage = sprintf('Testing method "%s" with route "%s".', $httpMethod, $route);
-        $dispatcherResponse = (new Dispatcher($httpMethod))->dispatch($route);
+        $mockRequestHandler = $this->createMock(RequestHandlerInterface::class);
+        $dispatcherResponse = (new Dispatcher($mockRequestHandler))->dispatch($route, $httpMethod);
 
         if ($responseMustBeNull) {
             $this->assertNull($dispatcherResponse, $failMessage);

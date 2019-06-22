@@ -13,18 +13,7 @@ use TravelSorter\App\Dispatcher\DispatcherResponse;
 
 class Dispatcher implements DispatcherInterface
 {
-    protected $method;
-
-    /**
-     * Dispatcher constructor.
-     * @param $method
-     */
-    public function __construct(string $method)
-    {
-        $this->method = $method;
-    }
-
-    public function dispatch(string $requestRoute): ?DispatcherResponse
+    public function dispatch(string $requestRoute, string $httpMethod): ?DispatcherResponse
     {
         if ($requestRoute != '/api/sort') {
             // This route does not belongs to this dispatcher.
@@ -32,7 +21,7 @@ class Dispatcher implements DispatcherInterface
         }
 
         $requestBody = null;
-        switch (strtoupper($this->method)) {
+        switch (strtoupper($httpMethod)) {
             default:
                 /** @var RequestHandlerInterface $handler */
                 $handler = null;

@@ -36,8 +36,10 @@ class DispatcherAggregateFactoryTest extends TestCase
 
         $stubContainer->method('has')->willReturnMap([['config', $doesContainerHasConfigEntry]]);
 
+        $mockContainerGetResultMap = [];
+
         if ($doesContainerHasConfigEntry) {
-            $stubContainer->method('get')->willReturnMap([['config', $config]]);
+            $mockContainerGetResultMap[] = ['config', $config];
         } else {
             $stubContainer->method('get')->willThrowException(new \Exception());
         }
@@ -46,16 +48,25 @@ class DispatcherAggregateFactoryTest extends TestCase
             $this->expectException(MissingConfigEntry::class);
         }
 
+        if ($isContainerWellConfigured) {
+            foreach ($config[ConfigProvider::class][DispatcherInterface::class][DispatcherInterface::CONFIG_DISPATCHERS] as $expectedDispatcher) {
+                $mockContainerGetResultMap[] = [$expectedDispatcher, $this->createMock(DispatcherInterface::class)];
+            }
+        }
+
+        if ($mockContainerGetResultMap) {
+            $stubContainer->method('get')->willReturnMap($mockContainerGetResultMap);
+        }
+
         $mockBasePathDetector = $this->createMock(BasePathDetectorInterface::class);
-        $dispatcher = $factory->__invoke($mockBasePathDetector, $stubContainer);
+        $dispatcherAggregate = $factory->__invoke($mockBasePathDetector, $stubContainer);
 
         $basePathDetectorConfig = $config[ConfigProvider::class][DispatcherInterface::class];
         $expectedDispatchers = $basePathDetectorConfig[DispatcherInterface::CONFIG_DISPATCHERS];
 
-        $this->assertInstanceOf(DispatcherAggregate::class, $dispatcher);
-        $this->assertSame($mockBasePathDetector, $dispatcher->getBasePathDetector());
-        $this->assertSame($expectedDispatchers, $dispatcher->getDispatchers());
-        $this->assertCount(count($expectedDispatchers), $dispatcher->getDispatchers());
+        $this->assertInstanceOf(DispatcherAggregate::class, $dispatcherAggregate);
+        $this->assertSame($mockBasePathDetector, $dispatcherAggregate->getBasePathDetector());
+        $this->assertCount(count($expectedDispatchers), $dispatcherAggregate->getDispatchers());
     }
 
     public function containerIsMissConfiguredProvider(): array
@@ -78,7 +89,7 @@ class DispatcherAggregateFactoryTest extends TestCase
                     ConfigProvider::class => [
                         DispatcherInterface::class => [
                             DispatcherInterface::CONFIG_DISPATCHERS => [
-                                $this->createMock(DispatcherInterface::class)
+                                'DispatchService1',
                             ],
                         ],
                     ],
@@ -90,9 +101,9 @@ class DispatcherAggregateFactoryTest extends TestCase
                     ConfigProvider::class => [
                         DispatcherInterface::class => [
                             DispatcherInterface::CONFIG_DISPATCHERS => [
-                                $this->createMock(DispatcherInterface::class),
-                                $this->createMock(DispatcherInterface::class),
-                                $this->createMock(DispatcherInterface::class),
+                                'DispatchService1',
+                                'DispatchService2',
+                                'DispatchService3',
                             ],
                         ],
                     ],

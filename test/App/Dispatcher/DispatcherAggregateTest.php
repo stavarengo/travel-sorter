@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TravelSorter\Test\App\Dispatcher;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use TravelSorter\App\BasePathDetector\BasePathDetectorInterface;
 use TravelSorter\App\Dispatcher\DispatcherAggregate;
@@ -14,7 +15,7 @@ class DispatcherAggregateTest extends TestCase
 {
     public function testWithNoDispatchers()
     {
-        $this->assertNull((new DispatcherAggregate($this->mockBasePathDetector('/'), []))->dispatch('/'));
+        $this->assertNull((new DispatcherAggregate($this->mockBasePathDetector('/'), []))->dispatch('/', 'GET'));
     }
 
     private function mockBasePathDetector(string $basePath): BasePathDetectorInterface
@@ -29,26 +30,26 @@ class DispatcherAggregateTest extends TestCase
 
     public function testWithDispatchersThatReturnNonNullValues()
     {
-        /** @var DispatcherInterface $stubDispatcher */
+        /** @var DispatcherInterface|MockObject $stubDispatcher */
         $stubDispatcher = $this->createMock(DispatcherInterface::class);
         $stubDispatcher->method('dispatch')
             ->willReturn(new DispatcherResponse(200, '', []));
 
         $dispatchers = [$stubDispatcher];
 
-        $this->assertNotNull((new DispatcherAggregate($this->mockBasePathDetector('/'), $dispatchers))->dispatch('/'));
+        $this->assertNotNull((new DispatcherAggregate($this->mockBasePathDetector('/'), $dispatchers))->dispatch('/', 'GET'));
     }
 
     public function testWithDispatchersThatReturnNullValues()
     {
-        /** @var DispatcherInterface $stubDispatcher */
+        /** @var DispatcherInterface|MockObject $stubDispatcher */
         $stubDispatcher = $this->createMock(DispatcherInterface::class);
         $stubDispatcher->method('dispatch')
             ->willReturn(null);
 
         $dispatchers = [$stubDispatcher];
 
-        $this->assertNull((new DispatcherAggregate($this->mockBasePathDetector('/'), $dispatchers))->dispatch('/'));
+        $this->assertNull((new DispatcherAggregate($this->mockBasePathDetector('/'), $dispatchers))->dispatch('/', 'GET'));
     }
 
     /**

@@ -9,6 +9,8 @@ interface DispatcherInterface
 {
     /**
      * All dispatchers of the application.
+     * This must be an array of strings.
+     * Each string must be the name of "service" inside your DI container.
      */
     public const CONFIG_DISPATCHERS = 'dispatchers';
 
@@ -20,10 +22,12 @@ interface DispatcherInterface
      * @param string $requestRoute
      *      The route requested.
      *
+     * @param string $httpMethod
+     *      The HTTP method of the request.
+     *      Eg: POST, PUT, GET, HEAD, etc.
+     *
      * @return DispatcherResponse|null
      *
-     * @throws \Throwable
-     *      It can throw any exception during execution.
      */
-    public function dispatch(string $requestRoute): ?DispatcherResponse;
+    public function dispatch(string $requestRoute, string $httpMethod): ?DispatcherResponse;
 }
