@@ -27,6 +27,7 @@ class ConfigProvider
         return [
             BasePathDetector\BasePathDetectorInterface::class => \DI\factory(BasePathDetector\BasePathDetectorFactory::class),
             Dispatcher\DispatcherInterface::class => \DI\factory(DispatcherAggregateFactory::class),
+            TicketsSorter\TicketsSorterInterface::class => \DI\create(TicketsSorter\SortByOriginAlphabetically::class),
             RouteDetector\RouteDetectorInterface::class => \DI\create(RouteDetector\RouteDetector::class),
         ];
     }
