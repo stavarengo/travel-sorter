@@ -40,9 +40,8 @@ class Dispatcher implements DispatcherInterface
             if ($handler->canHandle($httpMethod)) {
                 $requestBody = null;
                 if (strtoupper($httpMethod) === 'POST') {
-                    if ($input = file_get_contents('php://input')) {
-                        $requestBody = json_decode($input);
-                    }
+                    $input = file_get_contents('php://input');
+                    $requestBody = json_decode($input);
                 }
                 $apiResponse = $handler->handleIt($requestBody);
                 break;

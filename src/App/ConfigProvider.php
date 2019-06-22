@@ -23,7 +23,7 @@ class ConfigProvider
         return [
             BasePathDetector\BasePathDetectorInterface::class => \DI\factory(BasePathDetector\BasePathDetectorFactory::class),
             Dispatcher\DispatcherInterface::class => \DI\factory(Dispatcher\DispatcherAggregateFactory::class),
-            TicketsSorter\TicketsSorterInterface::class => \DI\autowire(TicketsSorter\SortByOriginAlphabetically::class),
+            TicketsSorter\TicketsSorterInterface::class => \DI\autowire(TicketsSorter\SortByConnectionsBetweenTickets\SortByConnectionsBetweenTickets::class),
             RouteDetector\RouteDetectorInterface::class => \DI\autowire(RouteDetector\RouteDetector::class),
         ];
     }
