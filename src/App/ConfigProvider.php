@@ -2,10 +2,6 @@
 
 namespace TravelSorter\App;
 
-use TravelSorter\App\BasePathDetector\BasePathDetectorInterface;
-use TravelSorter\App\Dispatcher\DispatcherAggregate;
-use TravelSorter\App\Dispatcher\DispatcherAggregateFactory;
-
 /**
  * The configuration provider for the App module
  */
@@ -16,8 +12,8 @@ class ConfigProvider
         return [
             'container_definitions' => $this->getContainerDefinitions(),
             self::class => [
-                BasePathDetectorInterface::class => $this->getBasePathDetectorConfig(),
-                DispatcherAggregate::class => $this->getDispatcherAggregateConfig(),
+                BasePathDetector\BasePathDetectorInterface::class => $this->getBasePathDetectorConfig(),
+                Dispatcher\DispatcherAggregate::class => $this->getDispatcherAggregateConfig(),
             ]
         ];
     }
@@ -26,24 +22,24 @@ class ConfigProvider
     {
         return [
             BasePathDetector\BasePathDetectorInterface::class => \DI\factory(BasePathDetector\BasePathDetectorFactory::class),
-            Dispatcher\DispatcherInterface::class => \DI\factory(DispatcherAggregateFactory::class),
-            TicketsSorter\TicketsSorterInterface::class => \DI\create(TicketsSorter\SortByOriginAlphabetically::class),
-            RouteDetector\RouteDetectorInterface::class => \DI\create(RouteDetector\RouteDetector::class),
+            Dispatcher\DispatcherInterface::class => \DI\factory(Dispatcher\DispatcherAggregateFactory::class),
+            TicketsSorter\TicketsSorterInterface::class => \DI\autowire(TicketsSorter\SortByOriginAlphabetically::class),
+            RouteDetector\RouteDetectorInterface::class => \DI\autowire(RouteDetector\RouteDetector::class),
         ];
     }
 
     public function getBasePathDetectorConfig(): array
     {
         return [
-            BasePathDetectorInterface::CONFIG_PUBLIC_DIRECTORY => realpath(__DIR__ . '/../../public'),
-            BasePathDetectorInterface::CONFIG_DOCUMENT_ROOT => $_SERVER['DOCUMENT_ROOT'],
+            BasePathDetector\BasePathDetectorInterface::CONFIG_PUBLIC_DIRECTORY => realpath(__DIR__ . '/../../public'),
+            BasePathDetector\BasePathDetectorInterface::CONFIG_DOCUMENT_ROOT => $_SERVER['DOCUMENT_ROOT'],
         ];
     }
 
     public function getDispatcherAggregateConfig(): array
     {
         return [
-            DispatcherAggregate::CONFIG_DISPATCHERS => [],
+            Dispatcher\DispatcherAggregate::CONFIG_DISPATCHERS => [],
         ];
     }
 
