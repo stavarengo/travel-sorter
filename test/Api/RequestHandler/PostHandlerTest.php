@@ -11,6 +11,21 @@ use TravelSorter\App\TicketsSorter\TicketsSorterInterface;
 
 class PostHandlerTest extends TestCase
 {
+    public function testCanHandle()
+    {
+        $requestHandler = new PostHandler($this->createMock(TicketsSorterInterface::class));
+
+        $this->assertTrue($requestHandler->canHandle('post'));
+        $this->assertTrue($requestHandler->canHandle('POST'));
+        $this->assertTrue($requestHandler->canHandle('PosT'));
+
+        $this->assertFalse($requestHandler->canHandle('GET'));
+        $this->assertFalse($requestHandler->canHandle('DELETE'));
+        $this->assertFalse($requestHandler->canHandle('PUT'));
+        $this->assertFalse($requestHandler->canHandle('HEAD'));
+        $this->assertFalse($requestHandler->canHandle(''));
+    }
+
     public function testSuccessfulRequest()
     {
         $requestBody = (object)[

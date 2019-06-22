@@ -29,6 +29,11 @@ class PostHandler implements RequestHandlerInterface
         $this->ticketsSorter = $ticketsSorter;
     }
 
+    public function canHandle(string $httpMethod): bool
+    {
+        return strtoupper($httpMethod) === 'POST';
+    }
+
     /**
      * Handle the received request.
      *
