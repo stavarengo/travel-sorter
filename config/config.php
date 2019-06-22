@@ -15,6 +15,7 @@ return (function () {
 
             // Default App module config
             \TravelSorter\App\ConfigProvider::class,
+            \TravelSorter\Api\ConfigProvider::class,
 
             new \Zend\ConfigAggregator\PhpFileProvider('config/autoload/{{,*.}global,{,*.}local}.php'),
         ], $cacheConfig['config_cache_path']
