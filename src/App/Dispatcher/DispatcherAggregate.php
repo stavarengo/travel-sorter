@@ -42,26 +42,6 @@ class DispatcherAggregate implements DispatcherInterface
     }
 
     /**
-     * @param string $basePath
-     * @param string $requestUri
-     * @return string
-     */
-    public static function getRequestRoute(string $basePath, string $requestUri): string
-    {
-        $basePath = rtrim($basePath, '/');
-
-        $requestUri = parse_url($requestUri, PHP_URL_PATH);
-        $requestUri = $requestUri === null ? '' : $requestUri;
-        $requestUri = rtrim($requestUri, '/');
-
-        $requestRoute = preg_replace(sprintf('~^%s~', preg_quote($basePath, '~')), '', $requestUri);
-        $requestRoute = preg_replace('~^(.*?)index.php$~', '$1', $requestRoute);
-        $requestRoute = '/' . ltrim($requestRoute, '/');
-
-        return $requestRoute;
-    }
-
-    /**
      * @return BasePathDetectorInterface
      */
     public function getBasePathDetector(): BasePathDetectorInterface

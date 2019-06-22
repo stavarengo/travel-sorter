@@ -51,38 +51,4 @@ class DispatcherAggregateTest extends TestCase
 
         $this->assertNull((new DispatcherAggregate($this->mockBasePathDetector('/'), $dispatchers))->dispatch('/', 'GET'));
     }
-
-    /**
-     * @dataProvider getRequestRouteProvider
-     */
-    public function testGetRequestRoute(string $basePath, string $fullRequestUri, string $expectedRoute)
-    {
-        $failMsg = 'Failed when base path was "%s" and request URI was "%s"';
-        $this->assertEquals(
-            $expectedRoute,
-            DispatcherAggregate::getRequestRoute($basePath, $fullRequestUri),
-            sprintf($failMsg, $basePath, $fullRequestUri)
-        );
-    }
-
-    public function getRequestRouteProvider(): array
-    {
-        return [
-            // BASE PATH, FULL REQUEST URI, EXPECTED RESULT
-            ['', '/?param=value#component', '/'],
-            ['/', '/?param=value#component', '/'],
-            ['/public', '/public/?param=value#component', '/'],
-            ['/public', '/public?param=value#component', '/'],
-            ['/public/', '/public/?param=value#component', '/'],
-            ['/html/public', '/html/public/?param=value#component', '/'],
-            ['/html/public', '/html/public?param=value#component', '/'],
-            ['/html/public/', '/html/public/?param=value#component', '/'],
-            ['', '/api/sort?param=value#component', '/api/sort'],
-            ['/', '/api/sort?param=value#component', '/api/sort'],
-            ['/public', '/public/api/sort?param=value#component', '/api/sort'],
-            ['/public/', '/public/api/sort?param=value#component', '/api/sort'],
-            ['/html/public', '/html/public/api/sort?param=value#component', '/api/sort'],
-            ['/html/public/', '/html/public/api/sort?param=value#component', '/api/sort'],
-        ];
-    }
 }

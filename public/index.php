@@ -23,8 +23,11 @@ require __DIR__ . '/../vendor/autoload.php';
     try {
         /** @var \TravelSorter\App\Dispatcher\DispatcherInterface $dispatcher */
         $dispatcher = $container->get(\TravelSorter\App\Dispatcher\DispatcherInterface::class);
+        /** @var \TravelSorter\App\RouteDetector\RouteDetectorInterface $routeDetector */
+        $routeDetector = $container->get(\TravelSorter\App\RouteDetector\RouteDetectorInterface::class);
 
-        $dispatcherResponse = $dispatcher->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
+        $requestRoute = $routeDetector->detect($_SERVER['REQUEST_URI']);
+        $dispatcherResponse = $dispatcher->dispatch($requestRoute, $_SERVER['REQUEST_METHOD']);
         if (!$dispatcherResponse) {
             $dispatcherResponse = new \TravelSorter\App\Dispatcher\DispatcherResponse(
                 404,

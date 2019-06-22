@@ -3,7 +3,6 @@
 namespace TravelSorter\App;
 
 use TravelSorter\App\BasePathDetector\BasePathDetectorInterface;
-use TravelSorter\App\Dispatcher\DispatcherAggregate;
 use TravelSorter\App\Dispatcher\DispatcherAggregateFactory;
 use TravelSorter\App\Dispatcher\DispatcherInterface;
 
@@ -28,6 +27,7 @@ class ConfigProvider
         return [
             BasePathDetector\BasePathDetectorInterface::class => \DI\factory(BasePathDetector\BasePathDetectorFactory::class),
             Dispatcher\DispatcherInterface::class => \DI\factory(DispatcherAggregateFactory::class),
+            RouteDetector\RouteDetectorInterface::class => \DI\create(RouteDetector\RouteDetector::class),
         ];
     }
 
