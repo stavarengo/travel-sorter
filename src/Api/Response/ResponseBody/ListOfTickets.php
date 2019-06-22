@@ -49,7 +49,7 @@ class ListOfTickets implements ResponseBodyInterface
                     'gate' => $ticket->getGate(),
                     'extra' => $ticket->getExtra(),
                 ];
-            }, $this->tickets),
+            }, array_values($this->tickets)),
         ]);
     }
 }

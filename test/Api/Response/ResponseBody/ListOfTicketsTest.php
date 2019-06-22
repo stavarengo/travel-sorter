@@ -29,7 +29,7 @@ class ListOfTicketsTest extends TestCase
 
         $this->assertCount(count($tickets), $listOfTickets->getTickets());
 
-        $this->assertJsonStringEqualsJsonString(json_encode(['tickets' => $ticketsAsArray]), $listOfTickets->toJson());
+        $this->assertJsonStringEqualsJsonString(json_encode(['tickets' => array_values($ticketsAsArray)]), $listOfTickets->toJson());
     }
 
     private function mockTicket(
@@ -56,7 +56,7 @@ class ListOfTicketsTest extends TestCase
         return [
             [
                 [
-                    [
+                    1 => [
                         'transport' => 'Flight',
                         'origin' => 'New York',
                         'destiny' => 'Stockholm',
@@ -68,7 +68,7 @@ class ListOfTicketsTest extends TestCase
             ],
             [
                 [
-                    [
+                    1 => [
                         'transport' => 'Train',
                         'origin' => 'Rome',
                         'destiny' => 'Florence',
@@ -76,7 +76,7 @@ class ListOfTicketsTest extends TestCase
                         'gate' => null,
                         'extra' => null
                     ],
-                    [
+                    0 => [
                         'transport' => 'Airport bus',
                         'origin' => 'Barcelona',
                         'destiny' => 'Gerona Airport',
