@@ -2,6 +2,8 @@
 
 namespace TravelSorter\App;
 
+use TravelSorter\Api\RequestHandler\PostHandler;
+
 /**
  * The configuration provider for the App module
  */
@@ -13,7 +15,7 @@ class ConfigProvider
             'container_definitions' => $this->getContainerDefinitions(),
             self::class => [
                 BasePathDetector\BasePathDetectorInterface::class => $this->getBasePathDetectorConfig(),
-                Dispatcher\DispatcherAggregate::class => $this->getDispatcherAggregateConfig(),
+                Dispatcher\DispatcherInterface::class => $this->getDispatcherConfig(),
             ]
         ];
     }
@@ -22,7 +24,7 @@ class ConfigProvider
     {
         return [
             BasePathDetector\BasePathDetectorInterface::class => \DI\factory(BasePathDetector\BasePathDetectorFactory::class),
-            Dispatcher\DispatcherInterface::class => \DI\factory(Dispatcher\DispatcherAggregateFactory::class),
+            Dispatcher\DispatcherInterface::class => \DI\factory(Dispatcher\DispatcherFactory::class),
             TicketsSorter\TicketsSorterInterface::class => \DI\autowire(TicketsSorter\SortByConnectionsBetweenTickets\SortByConnectionsBetweenTickets::class),
             RouteDetector\RouteDetectorInterface::class => \DI\autowire(RouteDetector\RouteDetector::class),
         ];
@@ -36,10 +38,10 @@ class ConfigProvider
         ];
     }
 
-    public function getDispatcherAggregateConfig(): array
+    public function getDispatcherConfig(): array
     {
         return [
-            Dispatcher\DispatcherAggregate::CONFIG_DISPATCHERS => [],
+            Dispatcher\DispatcherInterface::REQUEST_HANDLER_MAP => []
         ];
     }
 

@@ -2,10 +2,9 @@
 declare(strict_types=1);
 
 
-namespace TravelSorter\Api\Response\ResponseBody;
+namespace TravelSorter\Api\ResponseBody;
 
 
-use TravelSorter\Api\Response\ResponseBodyInterface;
 use TravelSorter\App\TicketsSorter\TicketInterface;
 
 class ListOfTickets implements ResponseBodyInterface
@@ -37,7 +36,7 @@ class ListOfTickets implements ResponseBodyInterface
      *
      * @return string
      */
-    public function toJson(): string
+    public function __toString(): string
     {
         return json_encode([
             'tickets' => array_map(function (TicketInterface $ticket) {

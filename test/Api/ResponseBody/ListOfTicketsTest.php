@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace TravelSorter\Test\Api\Response\ResponseBody;
+namespace TravelSorter\Test\Api\ResponseBody;
 
 use PHPUnit\Framework\TestCase;
-use TravelSorter\Api\Response\ResponseBody\ListOfTickets;
+use TravelSorter\Api\ResponseBody\ListOfTickets;
 use TravelSorter\App\TicketsSorter\TicketInterface;
 
 class ListOfTicketsTest extends TestCase
@@ -29,7 +29,7 @@ class ListOfTicketsTest extends TestCase
 
         $this->assertCount(count($tickets), $listOfTickets->getTickets());
 
-        $this->assertJsonStringEqualsJsonString(json_encode(['tickets' => array_values($ticketsAsArray)]), $listOfTickets->toJson());
+        $this->assertJsonStringEqualsJsonString(json_encode(['tickets' => array_values($ticketsAsArray)]), $listOfTickets->__toString());
     }
 
     private function mockTicket(

@@ -2,10 +2,8 @@
 declare(strict_types=1);
 
 
-namespace TravelSorter\Api\Response\ResponseBody;
+namespace TravelSorter\Api\ResponseBody;
 
-
-use TravelSorter\Api\Response\ResponseBodyInterface;
 
 class Error implements ResponseBodyInterface
 {
@@ -31,7 +29,7 @@ class Error implements ResponseBodyInterface
         return $this->detail;
     }
 
-    public function toJson(): string
+    public function __toString(): string
     {
         $errorAsArray = [
             'error' => true,

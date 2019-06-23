@@ -5,9 +5,11 @@ return [
     'container_definitions' => [
     ],
     \TravelSorter\App\ConfigProvider::class => [
-        \TravelSorter\App\Dispatcher\DispatcherAggregate::class => [
-            \TravelSorter\App\Dispatcher\DispatcherAggregate::CONFIG_DISPATCHERS => [
-                \TravelSorter\Api\Dispatcher::class,
+        \TravelSorter\App\Dispatcher\DispatcherInterface::class => [
+            \TravelSorter\App\Dispatcher\DispatcherInterface::REQUEST_HANDLER_MAP => [
+                '/api/sort' => [
+                    'POST' => \TravelSorter\Api\RequestHandler\PostHandler::class,
+                ]
             ],
         ],
     ],

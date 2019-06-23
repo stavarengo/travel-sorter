@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 
-namespace TravelSorter\Api\Response;
+namespace TravelSorter\Api\ResponseBody;
 
 
 interface ResponseBodyInterface
@@ -12,5 +12,5 @@ interface ResponseBodyInterface
      *
      * @return string
      */
-    public function toJson(): string;
+    public function __toString(): string;
 }

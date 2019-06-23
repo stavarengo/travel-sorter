@@ -6,18 +6,19 @@ namespace TravelSorter\Test\App\Dispatcher;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use TravelSorter\App\BasePathDetector\BasePathDetectorInterface;
 use TravelSorter\App\ConfigProvider;
-use TravelSorter\App\Dispatcher\DispatcherAggregate;
-use TravelSorter\App\Dispatcher\DispatcherAggregateFactory;
+use TravelSorter\App\Dispatcher\Dispatcher;
+use TravelSorter\App\Dispatcher\DispatcherFactory;
 use TravelSorter\App\Dispatcher\DispatcherInterface;
 use TravelSorter\App\Dispatcher\Exception\MissingConfigEntry;
+use TravelSorter\App\RouteDetector\RouteDetectorInterface;
+use Zend\Stdlib\RequestInterface;
 
-class DispatcherAggregateFactoryTest extends TestCase
+class DispatcherFactoryTest extends TestCase
 {
     public function testFactoryMustBeInvokable()
     {
-        $factory = new DispatcherAggregateFactory();
+        $factory = new DispatcherFactory();
 
         $this->assertIsCallable($factory);
     }
@@ -27,7 +28,7 @@ class DispatcherAggregateFactoryTest extends TestCase
      */
     public function testFactoryMustGetTheConfigFromTheContainer(bool $isContainerWellConfigured, ?array $config)
     {
-        $factory = new DispatcherAggregateFactory();
+        $factory = new DispatcherFactory();
 
         /** @var ContainerInterface|\PHPUnit\Framework\MockObject\MockObject $stubContainer */
         $stubContainer = $this->createMock(ContainerInterface::class);
@@ -49,8 +50,13 @@ class DispatcherAggregateFactoryTest extends TestCase
         }
 
         if ($isContainerWellConfigured) {
-            foreach ($config[ConfigProvider::class][DispatcherAggregate::class][DispatcherAggregate::CONFIG_DISPATCHERS] as $expectedDispatcher) {
-                $mockContainerGetResultMap[] = [$expectedDispatcher, $this->createMock(DispatcherInterface::class)];
+            foreach ($config[ConfigProvider::class][DispatcherInterface::class][DispatcherInterface::REQUEST_HANDLER_MAP] as $routeMap) {
+                foreach ($routeMap as $requestHandlerServiceName) {
+                    $mockContainerGetResultMap[] = [
+                        $requestHandlerServiceName,
+                        $this->createMock(RequestInterface::class)
+                    ];
+                }
             }
         }
 
@@ -58,15 +64,15 @@ class DispatcherAggregateFactoryTest extends TestCase
             $stubContainer->method('get')->willReturnMap($mockContainerGetResultMap);
         }
 
-        $mockBasePathDetector = $this->createMock(BasePathDetectorInterface::class);
-        $dispatcherAggregate = $factory->__invoke($mockBasePathDetector, $stubContainer);
+        $mockRouteDetector = $this->createMock(RouteDetectorInterface::class);
+        $dispatcher = $factory->__invoke($mockRouteDetector, $stubContainer);
 
-        $basePathDetectorConfig = $config[ConfigProvider::class][DispatcherAggregate::class];
-        $expectedDispatchers = $basePathDetectorConfig[DispatcherAggregate::CONFIG_DISPATCHERS];
+        $basePathDetectorConfig = $config[ConfigProvider::class][DispatcherInterface::class];
+        $expectedDispatchers = $basePathDetectorConfig[DispatcherInterface::REQUEST_HANDLER_MAP];
 
-        $this->assertInstanceOf(DispatcherAggregate::class, $dispatcherAggregate);
-        $this->assertSame($mockBasePathDetector, $dispatcherAggregate->getBasePathDetector());
-        $this->assertCount(count($expectedDispatchers), $dispatcherAggregate->getDispatchers());
+        $this->assertInstanceOf(Dispatcher::class, $dispatcher);
+        $this->assertSame($mockRouteDetector, $dispatcher->getRouteDetector());
+        $this->assertCount(count($expectedDispatchers), $dispatcher->getRequestHandlerMap());
     }
 
     public function containerIsMissConfiguredProvider(): array
@@ -79,7 +85,7 @@ class DispatcherAggregateFactoryTest extends TestCase
                 false,
                 [
                     ConfigProvider::class => [
-                        DispatcherAggregate::class => [],
+                        DispatcherInterface::class => [],
                     ],
                 ],
             ],
@@ -87,9 +93,11 @@ class DispatcherAggregateFactoryTest extends TestCase
                 true,
                 [
                     ConfigProvider::class => [
-                        DispatcherAggregate::class => [
-                            DispatcherAggregate::CONFIG_DISPATCHERS => [
-                                'DispatchService1',
+                        DispatcherInterface::class => [
+                            DispatcherInterface::REQUEST_HANDLER_MAP => [
+                                'route1' => [
+                                    'POST' => 'RequestHandlerServiceNameService1',
+                                ]
                             ],
                         ],
                     ],
@@ -99,11 +107,15 @@ class DispatcherAggregateFactoryTest extends TestCase
                 true,
                 [
                     ConfigProvider::class => [
-                        DispatcherAggregate::class => [
-                            DispatcherAggregate::CONFIG_DISPATCHERS => [
-                                'DispatchService1',
-                                'DispatchService2',
-                                'DispatchService3',
+                        DispatcherInterface::class => [
+                            DispatcherInterface::REQUEST_HANDLER_MAP => [
+                                'route1' => [
+                                    'POST' => 'RequestHandlerServiceNameService1',
+                                    'GET' => 'RequestHandlerServiceNameService2',
+                                ],
+                                'route2' => [
+                                    'PUT' => 'RequestHandlerServiceNameService3',
+                                ]
                             ],
                         ],
                     ],

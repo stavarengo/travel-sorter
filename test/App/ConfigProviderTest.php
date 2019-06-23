@@ -7,7 +7,6 @@ namespace TravelSorter\Test\App;
 use PHPUnit\Framework\TestCase;
 use TravelSorter\App\BasePathDetector\BasePathDetectorInterface;
 use TravelSorter\App\ConfigProvider;
-use TravelSorter\App\Dispatcher\DispatcherAggregate;
 use TravelSorter\App\Dispatcher\DispatcherInterface;
 use TravelSorter\App\RouteDetector\RouteDetectorInterface;
 use TravelSorter\App\TicketsSorter\TicketsSorterInterface;
@@ -51,15 +50,15 @@ class ConfigProviderTest extends TestCase
         );
     }
 
-    public function testDispatcherAggregateConfig()
+    public function testDispatcherConfig()
     {
         $configProvider = new ConfigProvider();
 
-        $config = $configProvider->getDispatcherAggregateConfig();
+        $config = $configProvider->getDispatcherConfig();
 
         $this->assertCount(1, $config);
-        $this->assertArrayHasKey(DispatcherAggregate::CONFIG_DISPATCHERS, $config);
-        $this->assertCount(0, $config[DispatcherAggregate::CONFIG_DISPATCHERS]);
+        $this->assertArrayHasKey(DispatcherInterface::REQUEST_HANDLER_MAP, $config);
+        $this->assertCount(0, $config[DispatcherInterface::REQUEST_HANDLER_MAP]);
     }
 
     public function testInvoke()
@@ -71,7 +70,7 @@ class ConfigProviderTest extends TestCase
             'container_definitions' => $configProvider->getContainerDefinitions(),
             ConfigProvider::class => [
                 BasePathDetectorInterface::class => $configProvider->getBasePathDetectorConfig(),
-                DispatcherAggregate::class => $configProvider->getDispatcherAggregateConfig(),
+                DispatcherInterface::class => $configProvider->getDispatcherConfig(),
             ]
         ];
 

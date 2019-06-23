@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace TravelSorter\App\BasePathDetector;
 
 
-use TravelSorter\App\BasePathDetector\Exception\DocumentRootIsRequired;
 use TravelSorter\App\BasePathDetector\Exception\PublicDirectoryPathCanNotBeRelative;
-use TravelSorter\App\BasePathDetector\Exception\PublicDirectoryPathIsRequired;
 
 interface BasePathDetectorInterface
 {

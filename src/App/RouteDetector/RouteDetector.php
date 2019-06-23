@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TravelSorter\App\RouteDetector;
 
 
+use Psr\Http\Message\UriInterface;
 use TravelSorter\App\BasePathDetector\BasePathDetectorInterface;
 
 class RouteDetector implements RouteDetectorInterface
@@ -23,15 +24,15 @@ class RouteDetector implements RouteDetectorInterface
         $this->basePathDetector = $basePathDetector;
     }
 
-    public function detect(string $requestUri): string
+    public function detect(UriInterface $uri): string
     {
         $basePath = rtrim($this->basePathDetector->detect(), '/');
 
-        $requestUri = parse_url($requestUri, PHP_URL_PATH);
-        $requestUri = $requestUri === null ? '' : $requestUri;
-        $requestUri = rtrim($requestUri, '/');
+        $uriPath = $uri->getPath();
+        $uriPath = $uriPath === null ? '' : $uriPath;
+        $uriPath = rtrim($uriPath, '/');
 
-        $requestRoute = preg_replace(sprintf('~^%s~', preg_quote($basePath, '~')), '', $requestUri);
+        $requestRoute = preg_replace(sprintf('~^%s~', preg_quote($basePath, '~')), '', $uriPath);
         $requestRoute = preg_replace('~^(.*?)index.php$~', '$1', $requestRoute);
         $requestRoute = '/' . ltrim($requestRoute, '/');
 

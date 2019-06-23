@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TravelSorter\App\RouteDetector;
 
 
+use Psr\Http\Message\UriInterface;
 use TravelSorter\App\BasePathDetector\BasePathDetectorInterface;
 
 interface RouteDetectorInterface
@@ -24,9 +25,11 @@ interface RouteDetectorInterface
      *
      * Done! In this example, the route is "/api/sort".
      *
+     * @param UriInterface $uri
+     *
      * @return string
      *
      * @see BasePathDetectorInterface
      */
-    public function detect(string $requestUri): string;
+    public function detect(UriInterface $uri): string;
 }

@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace TravelSorter\Test\Api\Response\ResponseBody;
+namespace TravelSorter\Test\Api\ResponseBody;
 
 use PHPUnit\Framework\TestCase;
-use TravelSorter\Api\Response\ResponseBody\Error;
+use TravelSorter\Api\ResponseBody\Error;
 
 class ErrorTest extends TestCase
 {
@@ -16,7 +16,7 @@ class ErrorTest extends TestCase
         $error = new Error($detail);
 
         $this->assertEquals($detail, $error->getDetail());
-        $this->assertJsonStringEqualsJsonString(json_encode(['error' => true, 'detail' => $detail]), $error->toJson());
+        $this->assertJsonStringEqualsJsonString(json_encode(['error' => true, 'detail' => $detail]), $error->__toString());
     }
 
     public function errorProvider(): array

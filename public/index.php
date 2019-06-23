@@ -19,33 +19,31 @@ require __DIR__ . '/../vendor/autoload.php';
 (function () {
     /** @var \Psr\Container\ContainerInterface $container */
     $container = include_once __DIR__ . '/../config/container.php';
-
     try {
         /** @var \TravelSorter\App\Dispatcher\DispatcherInterface $dispatcher */
         $dispatcher = $container->get(\TravelSorter\App\Dispatcher\DispatcherInterface::class);
-        /** @var \TravelSorter\App\RouteDetector\RouteDetectorInterface $routeDetector */
-        $routeDetector = $container->get(\TravelSorter\App\RouteDetector\RouteDetectorInterface::class);
 
-        $requestRoute = $routeDetector->detect($_SERVER['REQUEST_URI']);
-        $dispatcherResponse = $dispatcher->dispatch($requestRoute, $_SERVER['REQUEST_METHOD']);
-        if (!$dispatcherResponse) {
-            $dispatcherResponse = new \TravelSorter\App\Dispatcher\DispatcherResponse(
+        $request = \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
+
+        $response = $dispatcher->dispatch($request);
+        if (!$response) {
+            $response = new \GuzzleHttp\Psr7\Response(
                 404,
-                'Not found!',
-                ['Content-Type' => 'text/html; charset=UTF-8']
+                ['Content-Type' => 'text/html; charset=UTF-8'],
+                \GuzzleHttp\Psr7\stream_for('Not found!')
             );
         }
     } catch (\Throwable $e) {
-        $dispatcherResponse = $dispatcherResponse = new \TravelSorter\App\Dispatcher\DispatcherResponse(
+        $response = new \GuzzleHttp\Psr7\Response(
             500,
-            sprintf("Server error!\n\n%s", $e),
-            ['Content-Type' => 'text/html; charset=UTF-8']
+            ['Content-Type' => 'text/html; charset=UTF-8'],
+            \GuzzleHttp\Psr7\stream_for(sprintf("Server error!\n\n%s", $e))
         );
     }
 
-    http_response_code($dispatcherResponse->getStatusCode());
-    foreach ($dispatcherResponse->getHeaders() as $headerName => $hederValue) {
-        header("$headerName: $hederValue");
+    http_response_code($response->getStatusCode());
+    foreach ($response->getHeaders() as $headerName => $hederValue) {
+        header(sprintf('%s: %s', $headerName, $response->getHeaderLine($headerName)));
     }
-    echo $dispatcherResponse->getContent();
+    echo $response->getBody()->getContents();
 })();
