@@ -55,19 +55,6 @@ class SortByConnectionsBetweenTickets implements TicketsSorterInterface
         $firstDestiny = null;
         foreach ($ticketsGroupedByDestiny as $destiny => $unused) {
             if (!$ticketsGroupedByDestiny[$destiny]) {
-                if ($firstDestiny) {
-                    throw new MissingTicketsConnection('There is a missing connection between your tickets.');
-                }
-
-                $firstDestiny = $destiny;
-            }
-        }
-
-
-        /** @var string $firstDestiny */
-        $firstDestiny = null;
-        foreach ($ticketsGroupedByDestiny as $destiny => $unused) {
-            if (!$ticketsGroupedByDestiny[$destiny]) {
                 $firstDestiny = $destiny;
                 break;
             }
