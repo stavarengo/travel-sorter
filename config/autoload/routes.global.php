@@ -2,8 +2,6 @@
 declare(strict_types=1);
 
 return [
-    'container_definitions' => [
-    ],
     \TravelSorter\App\ConfigProvider::class => [
         \TravelSorter\App\Dispatcher\DispatcherInterface::class => [
             \TravelSorter\App\Dispatcher\DispatcherInterface::REQUEST_HANDLER_MAP => [
