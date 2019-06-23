@@ -67,7 +67,7 @@ with `.global.php` will be merged into one single set of configuration.
 Each module of the application provides its own configuration through a file called `ConfigProvider`. You can see 
 these files at [ConfigProvider of App Module] and [ConfigProvider of Api Module].
 
-Any configuration inside these `ConfigProvider` files can be override by creating the same config entry in file inside 
+Any configuration inside these `ConfigProvider` files can be override by creating the same config entry in a file inside 
 the folder [`config/autoload`]. In fact, that is how we control the routes. Take a look in the file [config/autoload/routes.global.php].
 
 
@@ -94,7 +94,7 @@ would fail if you forget to send a required parameter). The following is the JSO
 
 <a id="post-sort"></a>
 #### `POST /api/sort`
-Sort a set of thickets. 
+Sort a set of tickets. 
 
 **URL params**
 
@@ -102,7 +102,7 @@ None
 
 **Data params**
 
-It expect that the request body contains a JSON with a list of objects describing which ticket, as following:
+It expect that the request body contains a JSON with a list of objects describing each ticket, as following:
 ```js
 {
    // List of tickets to sort.
