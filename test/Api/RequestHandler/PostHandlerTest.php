@@ -8,6 +8,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 use TravelSorter\Api\RequestHandler\PostHandler;
 use TravelSorter\App\TicketsSorter\TicketsSorterInterface;
+use TravelSorter\App\TicketsSorter\TicketValidatorInterface;
 
 class PostHandlerTest extends TestCase
 {
@@ -34,7 +35,7 @@ class PostHandlerTest extends TestCase
         $mockTicketsSorter = $this->createMock(TicketsSorterInterface::class);
         $mockTicketsSorter->method('sort')->willReturn([]);
 
-        $requestHandler = new PostHandler($mockTicketsSorter);
+        $requestHandler = new PostHandler($mockTicketsSorter, $this->createMock(TicketValidatorInterface::class));
         $response = $requestHandler->handleIt($this->mockRequest($requestBody));
 
         $this->assertEquals(200, $response->getStatusCode());
@@ -61,7 +62,10 @@ class PostHandlerTest extends TestCase
         int $expectedStatusCode,
         RequestInterface $request
     ) {
-        $requestHandler = new PostHandler($this->createMock(TicketsSorterInterface::class));
+        $requestHandler = new PostHandler(
+            $this->createMock(TicketsSorterInterface::class),
+            $this->createMock(TicketValidatorInterface::class)
+        );
         $response = $requestHandler->handleIt($request);
 
         $this->assertEquals($expectedStatusCode, $response->getStatusCode());
@@ -76,46 +80,54 @@ class PostHandlerTest extends TestCase
             [json_encode('Missing body content.'), 422, $this->mockRequest('')],
             [json_encode('Missing the "tickets" attribute.'), 422, $this->mockRequest('[]')],
             [json_encode('Missing the "tickets" attribute.'), 422, $this->mockRequest('{}')],
-            [
-                trim(json_encode('Please provide a value for the "transport" attribute.'), '"'),
-                422,
-                $this->mockRequest(json_encode([
-                    'tickets' => [
-                        [
-                            'transport' => '',
-                            'origin' => 'Barcelona',
-                            'destiny' => 'New York',
-                        ]
-                    ]
-                ]))
-            ],
-            [
-                trim(json_encode('Please provide a value for the "origin" attribute.'), '"'),
-                422,
-                $this->mockRequest(json_encode([
-                    'tickets' => [
-                        [
-                            'transport' => 'Flight',
-                            'origin' => '',
-                            'destiny' => 'New York',
-                        ]
-                    ]
-                ]))
-            ],
-            [
-                trim(json_encode('Please provide a value for the "destiny" attribute.'), '"'),
-                422,
-                $this->mockRequest(json_encode([
-                    'tickets' => [
-                        [
-                            'transport' => 'Flight',
-                            'origin' => 'Barcelona',
-                            'destiny' => '',
-                        ]
-                    ]
-                ]))
-            ],
         ];
     }
 
+    /**
+     * @param string $requestBodyContent
+     * @param int $indexOfTheInvalidTicket
+     * @param array $validateResultOnConsecutiveCalls
+     *
+     * @dataProvider validatorRejectsOneOfTheTicketsProvider
+     */
+    public function testValidatorRejectsOneOfTheTickets(
+        string $requestBodyContent,
+        int $indexOfTheInvalidTicket,
+        array $validateResultOnConsecutiveCalls
+    ) {
+        $mockTicketValidator = $this->mockTicketValidator($validateResultOnConsecutiveCalls);
+
+        $requestHandler = new PostHandler($this->createMock(TicketsSorterInterface::class), $mockTicketValidator);
+
+        $response = $requestHandler->handleIt($this->mockRequest($requestBodyContent));
+
+        $this->assertEquals(422, $response->getStatusCode());
+
+        $responseContent = $response->getBody()->getContents();
+
+        $this->assertStringContainsString(
+            sprintf('There is a problem with the ticket you put in the position \"%s\".', $indexOfTheInvalidTicket),
+            $responseContent
+        );
+        $this->assertStringContainsString(
+            $validateResultOnConsecutiveCalls[$indexOfTheInvalidTicket],
+            $responseContent
+        );
+    }
+
+    private function mockTicketValidator(array $validateResultOnConsecutiveCalls): TicketValidatorInterface
+    {
+        $mockTicketValidator = $this->createMock(TicketValidatorInterface::class);
+        $mockTicketValidator->method('validate')->willReturnOnConsecutiveCalls(...$validateResultOnConsecutiveCalls);
+
+        return $mockTicketValidator;
+    }
+
+    public function validatorRejectsOneOfTheTicketsProvider(): array
+    {
+        return [
+            ['{"tickets": [{}]}', 0, ['Missing attribute.']],
+            ['{"tickets": [{}, {}]}', 1, [null, 'Missing attribute on second ticket.']],
+        ];
+    }
 }

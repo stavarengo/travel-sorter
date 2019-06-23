@@ -40,7 +40,7 @@ class Ticket implements TicketInterface
     /**
      * @return string
      */
-    public function getTransport(): string
+    public function getTransport(): ?string
     {
         return $this->transport;
     }
@@ -49,7 +49,7 @@ class Ticket implements TicketInterface
      * @param string $transport
      * @return Ticket
      */
-    public function setTransport(string $transport): Ticket
+    public function setTransport(?string $transport): Ticket
     {
         $this->transport = $transport;
         return $this;
@@ -58,7 +58,7 @@ class Ticket implements TicketInterface
     /**
      * @return string
      */
-    public function getOrigin(): string
+    public function getOrigin(): ?string
     {
         return $this->origin;
     }
@@ -67,7 +67,7 @@ class Ticket implements TicketInterface
      * @param string $origin
      * @return Ticket
      */
-    public function setOrigin(string $origin): Ticket
+    public function setOrigin(?string $origin): Ticket
     {
         $this->origin = $origin;
         return $this;
@@ -76,7 +76,7 @@ class Ticket implements TicketInterface
     /**
      * @return string
      */
-    public function getDestiny(): string
+    public function getDestiny(): ?string
     {
         return $this->destiny;
     }
@@ -85,7 +85,7 @@ class Ticket implements TicketInterface
      * @param string $destiny
      * @return Ticket
      */
-    public function setDestiny(string $destiny): Ticket
+    public function setDestiny(?string $destiny): Ticket
     {
         $this->destiny = $destiny;
         return $this;

@@ -14,7 +14,7 @@ interface TicketInterface
      *
      * @return string
      */
-    public function getTransport(): string;
+    public function getTransport(): ?string;
 
     /**
      * The origin of the trip.
@@ -22,7 +22,7 @@ interface TicketInterface
      *
      * @return string
      */
-    public function getOrigin(): string;
+    public function getOrigin(): ?string;
 
     /**
      * The destiny of the trip.
@@ -30,7 +30,7 @@ interface TicketInterface
      *
      * @return string
      */
-    public function getDestiny(): string;
+    public function getDestiny(): ?string;
 
     /**
      * The seat where the passenger will sit during the trip.
