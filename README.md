@@ -13,20 +13,13 @@ principles and design patterns on PHP.
   different environments (eg: stage, development, production, etc).
 - It is 100% covered with unit test.
 - Use [PHP PSR](https://www.php-fig.org/) standards.
-- No frameworks used (besides [PHPUnit]).
-- Only three dependencies:
+- No frameworks were used (besides [PHPUnit]).
+- Only four dependencies:
   - [php-di/php-di](https://github.com/PHP-DI/PHP-DI): For dependency injection.
+  - [guzzlehttp/psr7](https://github.com/guzzle/psr7): As [PSR-7] implementation,.  
   - [phpunit/phpunit](https://github.com/sebastianbergmann/phpunit): For unit test.  
   - [zendframework/zend-config-aggregator](https://github.com/zendframework/zend-config-aggregator): To merge all of the 
     application configurations together.
-
-
-## Modular Application
-
-- This is a modular application, compound of two modules: 
-  1. `App`: Where you can find behaviors not related to an API, such as the [sort algorithm], business logic, etc.
-  1. `Api`: This is where the API resides. This module only has behaviors related to API requests. There you will
-    find the Requests Handlers (AKA controllers), entities used in the API responses, etc.
 
 ## Getting Started
 
@@ -56,12 +49,34 @@ $ php -S 0.0.0.0:**_YOU_PORT_** -t public/
 > $ php -S 0.0.0.0:4000 -t public/ public/index.php
 > ```
 
-### Api Module
+## Modular Application
+
+- This is a modular application, compound of two modules: 
+  1. `App`: Where you can find behaviors not related to an API, such as the [sort algorithm], business logic, etc.
+  1. `Api`: This is where the API resides. This module only has behaviors related to API requests. There you will
+    find the Requests Handlers (AKA controllers), entities used in the API responses, etc.
+
+## Configuration Architecture
+
+The application behavior can be controlled by external configuration files. These "external configuration files"
+resides in folder [`config/autoload`]. So far we only have one file there, but any file inside that folder that ends 
+with `.global.php` will be merged into one single set of configuration.
+
+### Configurations Available
+
+Each module of the application provides its own configuration through a file called `ConfigProvider`. You can see 
+these files at [ConfigProvider of App Module] and [ConfigProvider of Api Module].
+
+Any configuration inside these `ConfigProvider` files can be override by creating the same config entry in file inside 
+the folder [`config/autoload`]. In fact, that is how we control the routes. Take a look in the file [config/autoload/routes.global.php].
+
+
+## Api Module
 
 The `travel-sorter` provides an API with one endpoint for sort your tickets: [`POST /api/sort`].
 
 <a id="the-error-response-layout"></a>
-#### The Error Response
+### The Error Response
 All endpoints, when end in failure, respond with a JSON trying to describe why the error happens (for example, it 
 would fail if you forget to send a required parameter). The following is the JSON used to represent and error response. 
 
@@ -75,10 +90,10 @@ would fail if you forget to send a required parameter). The following is the JSO
 }
  ```
 
-#### API endpoints
+### API endpoints
 
 <a id="post-sort"></a>
-##### `POST /api/sort`
+#### `POST /api/sort`
 Sort a set of thickets. 
 
 **URL params**
@@ -131,10 +146,10 @@ It expect that the request body contains a JSON with a list of objects describin
 ```bash
 $ curl -X POST 'http://127.0.0.1:4000/api/sort' --data-binary '{
   "tickets": [
-    {"transport": "Train 78A", "origin": "Madrid", "destiny": "Barcelona", "seat": "45B"},
-    {"transport": "Airport Bus", "origin": "Barcelona", "destiny": "Gerona Airport"},
     {"transport": "Flight SK455", "origin": "Gerona Airport", "destiny": "Stockholm", "seat": "3A", "extra": "Baggage drop at ticket counter 344."},
-    {"transport": "Flight SK22", "origin": "Stockholm", "destiny": "New York JFK", "gate": "22B", "seat": "7B", "extra": "Baggage will we automatically transferred from your last leg."}
+    {"transport": "Airport Bus", "origin": "Barcelona", "destiny": "Gerona Airport"},
+    {"transport": "Flight SK22", "origin": "Stockholm", "destiny": "New York JFK", "gate": "22B", "seat": "7B", "extra": "Baggage will we automatically transferred from your last leg."},
+    {"transport": "Train 78A", "origin": "Madrid", "destiny": "Barcelona", "seat": "45B"}
   ]
 }'
 ```
@@ -142,7 +157,8 @@ $ curl -X POST 'http://127.0.0.1:4000/api/sort' --data-binary '{
 **Success Response**
 
 - `200 - OK`
-It means that you set of tickets were successfully ordered response body will be in the same format you used in the request.
+It means that your set of tickets were successfully ordered. The response body will be in the same layout you sent in 
+the request.
 
 **Error Response**
 
@@ -152,9 +168,18 @@ All error responses will contain a body with [The Error Response Layout].
 - `422 - Unprocessable Entity`: If the `transport` attribute is missing in one of the tickets.
 - `422 - Unprocessable Entity`: If the `origin` attribute is missing in one of the tickets.
 - `422 - Unprocessable Entity`: If the `destiny` attribute is missing in one of the tickets.
+- `405 - Method Not Allowed`: If you do not use the POST method.
+- `400 - Bad Request`: If the set of tickets can not be sorted because they have a missing connection between them.
+- `400 - Bad Request`: If the journey ends in the same place it starts.
+- `500 - Bad Request`: If an unexpected error occurs.
 
 
 [PHPUnit]: https://phpunit.de/
 [`POST /api/sort`]: #post-sort
 [The Error Response Layout]: #the-error-response-layout
 [sort algorithm]: https://github.com/stavarengo/travel-sorter/tree/master/src/App/TicketsSorter
+[`config/autoload`]: https://github.com/stavarengo/travel-sorter/tree/master/config/autoload
+[config/autoload/routes.global.php]: https://github.com/stavarengo/travel-sorter/blob/master/config/autoload/routes.global.php
+[ConfigProvider of App Module]: https://github.com/stavarengo/travel-sorter/blob/master/src/App/ConfigProvider.php
+[ConfigProvider of Api Module]: https://github.com/stavarengo/travel-sorter/blob/master/src/Api/ConfigProvider.php
+[PSR-7]: https://www.php-fig.org/psr/psr-7/
