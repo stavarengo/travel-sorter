@@ -7,6 +7,9 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 use TravelSorter\Api\RequestHandler\PostHandler;
+use TravelSorter\App\TicketsSorter\Exception\MissingTicketsConnection;
+use TravelSorter\App\TicketsSorter\Exception\TicketsSorterException;
+use TravelSorter\App\TicketsSorter\Exception\YourTripEndsWhereItStarted;
 use TravelSorter\App\TicketsSorter\TicketsSorterInterface;
 use TravelSorter\App\TicketsSorter\TicketValidatorInterface;
 
@@ -128,6 +131,39 @@ class PostHandlerTest extends TestCase
         return [
             ['{"tickets": [{}]}', 0, ['Missing attribute.']],
             ['{"tickets": [{}, {}]}', 1, [null, 'Missing attribute on second ticket.']],
+        ];
+    }
+
+    /**
+     * @param int $expectedStatusCode
+     * @param string $expectedResponseMessage
+     * @param \Exception $ticketSorterException
+     *
+     * @dataProvider ticketSorterThrowsAndExceptionProvider
+     */
+    public function testTicketSorterThrowsAndException(
+        int $expectedStatusCode,
+        string $expectedResponseMessage,
+        \Exception $ticketSorterException
+    ) {
+        $mockTicketsSorter = $this->createMock(TicketsSorterInterface::class);
+        $mockTicketsSorter->method('sort')->willThrowException($ticketSorterException);
+
+        $requestHandler = new PostHandler($mockTicketsSorter, $this->mockTicketValidator([null]));
+        $response = $requestHandler->handleIt($this->mockRequest('{"tickets": [{}]}'));
+        $responseContent = $response->getBody()->getContents();
+
+        $this->assertEquals($expectedStatusCode, $response->getStatusCode());
+        $this->assertStringContainsString($expectedResponseMessage, $responseContent);
+    }
+
+    public function ticketSorterThrowsAndExceptionProvider(): array
+    {
+        return [
+            [400, ($msg = 'Missing connections.'), new MissingTicketsConnection($msg)],
+            [400, ($msg = 'End where starts.'), new YourTripEndsWhereItStarted($msg)],
+            [400, ($msg = 'Another exception.'), new TicketsSorterException($msg)],
+            [500, 'Unexpected error while trying to sort your tickets.', new \RuntimeException('Runtime error.')],
         ];
     }
 }

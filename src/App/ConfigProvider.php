@@ -2,8 +2,6 @@
 
 namespace TravelSorter\App;
 
-use TravelSorter\Api\RequestHandler\PostHandler;
-
 /**
  * The configuration provider for the App module
  */
@@ -25,7 +23,8 @@ class ConfigProvider
         return [
             BasePathDetector\BasePathDetectorInterface::class => \DI\factory(BasePathDetector\BasePathDetectorFactory::class),
             Dispatcher\DispatcherInterface::class => \DI\factory(Dispatcher\DispatcherFactory::class),
-            TicketsSorter\TicketsSorterInterface::class => \DI\autowire(TicketsSorter\SortByConnectionsBetweenTickets\SortByConnectionsBetweenTickets::class),
+            TicketsSorter\TicketsSorterInterface::class => \DI\autowire(TicketsSorter\SortByConnectionsBetweenTickets::class),
+            TicketsSorter\TicketValidatorInterface::class => \DI\autowire(TicketsSorter\TicketValidator::class),
             RouteDetector\RouteDetectorInterface::class => \DI\autowire(RouteDetector\RouteDetector::class),
         ];
     }

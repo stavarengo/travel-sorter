@@ -2,13 +2,11 @@
 declare(strict_types=1);
 
 
-namespace TravelSorter\App\TicketsSorter\SortByConnectionsBetweenTickets;
+namespace TravelSorter\App\TicketsSorter;
 
 
-use TravelSorter\App\TicketsSorter\SortByConnectionsBetweenTickets\Exception\MissingTicketsConnection;
-use TravelSorter\App\TicketsSorter\SortByConnectionsBetweenTickets\Exception\YourTripEndsWhereItStarted;
-use TravelSorter\App\TicketsSorter\TicketInterface;
-use TravelSorter\App\TicketsSorter\TicketsSorterInterface;
+use TravelSorter\App\TicketsSorter\Exception\MissingTicketsConnection;
+use TravelSorter\App\TicketsSorter\Exception\YourTripEndsWhereItStarted;
 
 class SortByConnectionsBetweenTickets implements TicketsSorterInterface
 {

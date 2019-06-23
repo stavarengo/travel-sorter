@@ -11,6 +11,7 @@ use Psr\Http\Message\ResponseInterface;
 use TravelSorter\Api\ResponseBody\Error;
 use TravelSorter\Api\ResponseBody\ListOfTickets;
 use TravelSorter\App\RequestHandler\RequestHandlerInterface;
+use TravelSorter\App\TicketsSorter\Exception\TicketsSorterException;
 use TravelSorter\App\TicketsSorter\Ticket;
 use TravelSorter\App\TicketsSorter\TicketInterface;
 use TravelSorter\App\TicketsSorter\TicketsSorterInterface;
@@ -74,8 +75,25 @@ class PostHandler implements RequestHandlerInterface
             }
         }
 
-
-        $tickets = $this->ticketsSorter->sort($tickets);
+        try {
+            $tickets = $this->ticketsSorter->sort($tickets);
+        } catch (TicketsSorterException $e) {
+            return new Response(
+                400,
+                [
+                    'Content-Type' => 'application/json'
+                ],
+                stream_for(new Error(sprintf('Impossible to sort you tickets. %s', $e->getMessage())))
+            );
+        } catch (\Throwable $e) {
+            return new Response(
+                500,
+                [
+                    'Content-Type' => 'application/json'
+                ],
+                stream_for(new Error('Unexpected error while trying to sort your tickets.'))
+            );
+        }
 
         return new Response(
             200,

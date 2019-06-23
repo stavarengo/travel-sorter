@@ -10,6 +10,7 @@ use TravelSorter\App\ConfigProvider;
 use TravelSorter\App\Dispatcher\DispatcherInterface;
 use TravelSorter\App\RouteDetector\RouteDetectorInterface;
 use TravelSorter\App\TicketsSorter\TicketsSorterInterface;
+use TravelSorter\App\TicketsSorter\TicketValidatorInterface;
 
 class ConfigProviderTest extends TestCase
 {
@@ -26,10 +27,11 @@ class ConfigProviderTest extends TestCase
 
         $config = $configProvider->getContainerDefinitions();
 
-        $this->assertCount(4, $config);
+        $this->assertCount(5, $config);
         $this->assertArrayHasKey(BasePathDetectorInterface::class, $config);
         $this->assertArrayHasKey(DispatcherInterface::class, $config);
         $this->assertArrayHasKey(TicketsSorterInterface::class, $config);
+        $this->assertArrayHasKey(TicketValidatorInterface::class, $config);
         $this->assertArrayHasKey(RouteDetectorInterface::class, $config);
     }
 

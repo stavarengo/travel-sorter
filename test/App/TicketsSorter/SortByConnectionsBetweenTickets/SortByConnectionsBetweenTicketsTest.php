@@ -5,9 +5,9 @@ namespace TravelSorter\Test\App\TicketsSorter\SortByConnectionsBetweenTickets;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use TravelSorter\App\TicketsSorter\SortByConnectionsBetweenTickets\Exception\MissingTicketsConnection;
-use TravelSorter\App\TicketsSorter\SortByConnectionsBetweenTickets\Exception\YourTripEndsWhereItStarted;
-use TravelSorter\App\TicketsSorter\SortByConnectionsBetweenTickets\SortByConnectionsBetweenTickets;
+use TravelSorter\App\TicketsSorter\Exception\MissingTicketsConnection;
+use TravelSorter\App\TicketsSorter\Exception\YourTripEndsWhereItStarted;
+use TravelSorter\App\TicketsSorter\SortByConnectionsBetweenTickets;
 use TravelSorter\App\TicketsSorter\TicketInterface;
 
 class SortByConnectionsBetweenTicketsTest extends TestCase
