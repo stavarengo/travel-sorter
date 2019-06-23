@@ -173,6 +173,16 @@ All error responses will contain a body with [The Error Response Layout].
 - `400 - Bad Request`: If the journey ends in the same place it starts.
 - `500 - Bad Request`: If an unexpected error occurs.
 
+## Composer Scripts
+
+The `travel-sorter` defines three composer scripts, as follow:
+- **`serve`**: Start PHP's built-in web server on the port 4000.
+- **`test`**: Run all unit tests.
+- **`test-coverage`**: Run all unit tests and generates a code coverage report in HTML format in the folder 
+  `test-coverage`. Please note that this functionality is only available when the tokenizer and Xdebug extensions are 
+  installed.
+
+
 
 [PHPUnit]: https://phpunit.de/
 [`POST /api/sort`]: #post-sort
