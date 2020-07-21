@@ -2,8 +2,9 @@
 
 ## About the project
 
-This project proposes a solution for the "Travel Tickets Order" problem. This problem says:
-> You are given a stack of travel tickets that will take you from a point A to point B via several stops on the way. 
+This project proposes a solution for the "Travel Tickets Order" problem
+([Eulerian Path Problem](https://en.wikipedia.org/wiki/Eulerian_path)). The problem goes like this:
+> You are given a stack of travel tickets that will take you from point A to point B via several stops on the way. 
 > All of the tickets are out of order and you don't know where your journey starts, nor where it ends. 
 > You must sort the tickets in the right order to complete your journey.
 
@@ -11,7 +12,7 @@ More then only present a solution for the problem, this project also aims to sho
 principles and design patterns on PHP.
 - The application is controlled with configurations files (nothing is hard coded), which make it ease to work in 
   different environments (eg: stage, development, production, etc).
-- It is 100% covered with unit test.
+- It is 100% covered with unit tests.
 - Use [PHP PSR](https://www.php-fig.org/) standards.
 - No frameworks were used (besides [PHPUnit]).
 - Only four dependencies:
@@ -34,7 +35,7 @@ principles and design patterns on PHP.
    ```
 1. You can now consume the API on the address http://127.0.0.1:4000
 
-If you want to start the serve using port different of 4000, you can start the server manually:
+If you want to start the server using port different of 4000, you can start the server manually:
 ```bash
 $ php -S 0.0.0.0:**_YOU_PORT_** -t public/
 ```
@@ -73,19 +74,19 @@ the folder [`config/autoload`]. In fact, that is how we control the routes. Take
 
 ## Api Module
 
-The `travel-sorter` provides an API with one endpoint for sort your tickets: [`POST /api/sort`].
+The `travel-sorter` provides an API with one endpoint for sorting your tickets: [`POST /api/sort`].
 
 <a id="the-error-response-layout"></a>
 ### The Error Response
 All endpoints, when end in failure, respond with a JSON trying to describe why the error happens (for example, it 
-would fail if you forget to send a required parameter). The following is the JSON used to represent and error response. 
+would fail if you forget to send a required parameter). The following is the JSON used to represent an error response. 
 
 ```js
 {
   // This attribute will always be `true`
   "error": true,
   
-  // An string containing more details about the error.
+  // A string containing more details about the error.
   "detail": "Missing the \"origin\" attribute."
 }
  ```
@@ -114,12 +115,12 @@ It expect that the request body contains a JSON with a list of objects describin
       "transport": "Airport Bus",
       
       // The origin of the trip.
-      // For example: a name of city, airport, etc.
+      // For example: a name of a city, airport, etc.
       // It is required.
       "origin": "Barcelona",
     
       // The destiny of the trip.
-      // For example: a name of city, airport, etc.
+      // For example: a name of a city, airport, etc.
       // It is required.
       "destiny": "Gerona Airport",
     
@@ -132,9 +133,9 @@ It expect that the request body contains a JSON with a list of objects describin
       "gate": "45B",
       
       // Any extra information related to the tick.
-      // You can use this to say, for example, where the passengers baggage should left before boarding.
+      // You can use this to say, for example, where the passengers baggage should be left before boarding.
       // It is optional.
-      "extra": "Baggage will we automatically transferred."
+      "extra": "Baggage will be automatically transferred."
     }
     
     // .... MORE ITEMS
