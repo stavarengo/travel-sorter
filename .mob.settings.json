@@ -7,7 +7,7 @@
     ]
   },
   "rotation": {
-    "driverInMinutes": 0.016666666666666666,
+    "driverInMinutes": 1,
     "breakInMinutes": 15,
     "howManyRotationsBeforeBreak": 6
   },
