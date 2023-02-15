@@ -1,0 +1,15 @@
+{
+  "team": {
+    "members": [
+      "rafa",
+      "you",
+      "eri"
+    ]
+  },
+  "rotation": {
+    "driverInMinutes": 1,
+    "breakInMinutes": 15,
+    "howManyRotationsBeforeBreak": 6
+  },
+  "version": "0.1.0"
+}
